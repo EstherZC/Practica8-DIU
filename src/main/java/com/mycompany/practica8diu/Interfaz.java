@@ -5,8 +5,12 @@
  */
 package com.mycompany.practica8diu;
 
+import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyVetoException;
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
@@ -30,6 +34,7 @@ public class Interfaz extends javax.swing.JFrame {
     private File file;
     private Mat imagenOriginal, imagenAlterada;
     private BufferedImage img;
+    private int x,y;
     
     public Interfaz() {
         initComponents();
@@ -96,7 +101,7 @@ public class Interfaz extends javax.swing.JFrame {
         jMenuFile.add(itemUmbralizar);
 
         itemCerrarOriginal.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.CTRL_DOWN_MASK));
-        itemCerrarOriginal.setText("Cerrar imagen original");
+        itemCerrarOriginal.setText("Cerrar todas las ventanas");
         itemCerrarOriginal.setEnabled(false);
         itemCerrarOriginal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -209,7 +214,9 @@ public class Interfaz extends javax.swing.JFrame {
                 img = (BufferedImage) HighGui.toBufferedImage(imagenOriginal);
                 if(img.getHeight() <= 768 && img.getWidth() <= 1024){
                     if(escritorio.getAllFrames().length > 0) cerrarVentanas();
-                    VentanaInterna ventana = new VentanaInterna(file.getName(), imagenOriginal);
+                    x=0;
+                    y=0;
+                    VentanaInterna ventana = new VentanaInterna(file.getName(), imagenOriginal,x,y);
                     escritorio.add(ventana);
                     ventana.setVisible(true);
                     itemUmbralizar.setEnabled(true);
@@ -224,17 +231,23 @@ public class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_itemAbrirActionPerformed
 
     private void itemUmbralizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemUmbralizarActionPerformed
-        try{
-            Integer umbral = Integer.parseInt(JOptionPane.showInputDialog(this, "¿Cuál es el valor del umbralizado de la imagen?", "Valor de umbralizado", JOptionPane.QUESTION_MESSAGE));
-            imagenAlterada = umbralizar(imagenOriginal, umbral);
-            
-            String nombre = "Umbral: "+umbral;
-            VentanaInterna ventana = new VentanaInterna(nombre, imagenAlterada);
-            ventana.menuUmbralVisible();
-            escritorio.add(ventana);
-            ventana.setVisible(true);
-        }catch(NumberFormatException e){
-            JOptionPane.showMessageDialog(this, "Sólo se pueden números enteros");
+        if(escritorio.getAllFrames().length < 8){   
+            try{
+                Integer umbral = Integer.parseInt(JOptionPane.showInputDialog(this, "¿Cuál es el valor del umbralizado de la imagen?", "Valor de umbralizado", JOptionPane.QUESTION_MESSAGE));
+                imagenAlterada = umbralizar(imagenOriginal, umbral);
+
+                String nombre = "Umbral: "+umbral;
+                x+=10;
+                y+=20;
+                VentanaInterna ventana = new VentanaInterna(nombre, imagenAlterada, x, y);
+                ventana.menuUmbralVisible();
+                escritorio.add(ventana);
+                ventana.setVisible(true);
+            }catch(NumberFormatException e){
+                JOptionPane.showMessageDialog(this, "Sólo se pueden números enteros");
+            }
+        } else{
+            JOptionPane.showMessageDialog(this, "Sólo puede tener ocho ventanas de umbralizado abiertas.\n Cierre alguna ventana");
         }
     }//GEN-LAST:event_itemUmbralizarActionPerformed
 
