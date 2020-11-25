@@ -31,7 +31,7 @@ public class VentanaInterna extends javax.swing.JInternalFrame {
     JFileChooser fc = new JFileChooser();
     FileNameExtensionFilter filter = new FileNameExtensionFilter("Imágenes (*.jpg, *.png)", "jpg", "png");
     
-    public VentanaInterna(String nombre, Mat imagen) {
+    public VentanaInterna(String nombre, Mat imagen, int x, int y) {
         
         this.imagen = imagen;
         initComponents();
@@ -39,7 +39,8 @@ public class VentanaInterna extends javax.swing.JInternalFrame {
         jMenuBar1.setEnabled(false);
         jMenuBar1.setVisible(false);
         this.setTitle(nombre);
-        this.setPreferredSize(new Dimension(imagenPintar.getWidth(),imagenPintar.getHeight()));
+        this.setLocation(x, y);
+        this.setSize(imagenPintar.getWidth(), imagenPintar.getHeight());
         this.setMaximizable(true);
         this.setIconifiable(true);
         this.setResizable(true);
@@ -120,8 +121,9 @@ public class VentanaInterna extends javax.swing.JInternalFrame {
     }
     
     public void menuUmbralVisible() {
-        jMenuBar1.setEnabled(true);
+        
         this.setClosable(true);
+        jMenuBar1.setEnabled(true);
         jMenuBar1.setVisible(true);
         itemGuardar.setEnabled(true);
         fc.addChoosableFileFilter(filter);
