@@ -23,7 +23,7 @@ public class Lienzo extends JPanel{
     public void setImagen(BufferedImage imagen){
         this.imagen = imagen;
         this.setPreferredSize(new Dimension(imagen.getWidth(), imagen.getHeight()));
-        repaint();
+        this.repaint();
     }
     
 }
