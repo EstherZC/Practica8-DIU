@@ -22,6 +22,8 @@ public class Interfaz extends javax.swing.JFrame {
     private int x,y;
     
     public Interfaz() {
+        x=0;
+        y=0;
         initComponents();
         fc.addChoosableFileFilter(filter);
         nu.pattern.OpenCV.loadShared();
