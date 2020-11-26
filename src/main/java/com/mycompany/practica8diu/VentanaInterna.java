@@ -105,8 +105,6 @@ public class VentanaInterna extends javax.swing.JInternalFrame {
     }
     
     public void menuUmbralVisible() {
-        
-        this.setClosable(true);
         jMenuBar1.setEnabled(true);
         jMenuBar1.setVisible(true);
         itemGuardar.setEnabled(true);
