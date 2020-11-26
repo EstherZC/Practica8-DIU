@@ -41,7 +41,7 @@ public class Interfaz extends javax.swing.JFrame {
         jMenuFile = new javax.swing.JMenu();
         itemAbrir = new javax.swing.JMenuItem();
         itemUmbralizar = new javax.swing.JMenuItem();
-        itemCerrarOriginal = new javax.swing.JMenuItem();
+        itemCerrarVentanas = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         itemCerrar = new javax.swing.JMenuItem();
         jMenuHelp = new javax.swing.JMenu();
@@ -52,13 +52,14 @@ public class Interfaz extends javax.swing.JFrame {
         itemHelpUmbralizar = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        escritorio.setBackground(new java.awt.Color(0, 255, 255));
-        escritorio.addComponentListener(new java.awt.event.ComponentAdapter() {
+        setMinimumSize(new java.awt.Dimension(100, 100));
+        addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentResized(java.awt.event.ComponentEvent evt) {
-                escritorioComponentResized(evt);
+                formComponentResized(evt);
             }
         });
+
+        escritorio.setBackground(new java.awt.Color(153, 255, 255));
 
         javax.swing.GroupLayout escritorioLayout = new javax.swing.GroupLayout(escritorio);
         escritorio.setLayout(escritorioLayout);
@@ -92,15 +93,15 @@ public class Interfaz extends javax.swing.JFrame {
         });
         jMenuFile.add(itemUmbralizar);
 
-        itemCerrarOriginal.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.CTRL_DOWN_MASK));
-        itemCerrarOriginal.setText("Cerrar todas las ventanas");
-        itemCerrarOriginal.setEnabled(false);
-        itemCerrarOriginal.addActionListener(new java.awt.event.ActionListener() {
+        itemCerrarVentanas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        itemCerrarVentanas.setText("Cerrar todas las ventanas");
+        itemCerrarVentanas.setEnabled(false);
+        itemCerrarVentanas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                itemCerrarOriginalActionPerformed(evt);
+                itemCerrarVentanasActionPerformed(evt);
             }
         });
-        jMenuFile.add(itemCerrarOriginal);
+        jMenuFile.add(itemCerrarVentanas);
         jMenuFile.add(jSeparator1);
 
         itemCerrar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_DOWN_MASK));
@@ -209,7 +210,7 @@ public class Interfaz extends javax.swing.JFrame {
                     x=0; y=0;
                     VentanaInterna ventana = crearVentanaInterna(file.getName(), imagenOriginal, x, y);
                     itemUmbralizar.setEnabled(true);
-                    itemCerrarOriginal.setEnabled(true);
+                    itemCerrarVentanas.setEnabled(true);
                 } else {
                     JOptionPane.showMessageDialog(this, "El tamaño de las imágenes debe ser como máximo 1024x768", "Tamaño imagen requerido", JOptionPane.ERROR_MESSAGE);
                 }
@@ -224,7 +225,7 @@ public class Interfaz extends javax.swing.JFrame {
             try{
                 int umbral = Integer.parseInt(JOptionPane.showInputDialog(this, "¿Cuál es el valor del umbralizado de la imagen?", "Valor de umbralizado", JOptionPane.QUESTION_MESSAGE));
                 imagenAlterada = umbralizar(imagenOriginal, umbral);
-                x+=10; y +=20;
+                x=80; 
                 VentanaInterna ventana = crearVentanaInterna("Umbral: " + umbral, imagenAlterada, x, y);
                 ventana.menuUmbralVisible();
             }catch(NumberFormatException e){
@@ -242,20 +243,23 @@ public class Interfaz extends javax.swing.JFrame {
         return ventana;
     }
 
-    private void itemCerrarOriginalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemCerrarOriginalActionPerformed
-        cerrarVentanas();
-        itemUmbralizar.setEnabled(false);
-        itemCerrarOriginal.setEnabled(false);
-    }//GEN-LAST:event_itemCerrarOriginalActionPerformed
+    private void itemCerrarVentanasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemCerrarVentanasActionPerformed
+        int answer = JOptionPane.showConfirmDialog(this, "¿Quiere cerrar todas las ventanas abiertas?", "Salir", JOptionPane.YES_NO_OPTION);
+        if(answer == JOptionPane.YES_OPTION){
+            cerrarVentanas();
+            itemUmbralizar.setEnabled(false);
+            itemCerrarVentanas.setEnabled(false);
+        }
+    }//GEN-LAST:event_itemCerrarVentanasActionPerformed
 
-    private void escritorioComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_escritorioComponentResized
+    private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
         JInternalFrame[] allFrames = escritorio.getAllFrames();
         for (JInternalFrame frame : allFrames) {
             if(frame.getLocation().getX() > this.getWidth() || frame.getLocation().getY() > this.getHeight()){
                 frame.reshape(0,0,this.getWidth()/3, this.getHeight()/3);
             }
         }
-    }//GEN-LAST:event_escritorioComponentResized
+    }//GEN-LAST:event_formComponentResized
 
     private void cerrarVentanas() {
         JInternalFrame[] allFrames = escritorio.getAllFrames();
@@ -320,7 +324,7 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JDesktopPane escritorio;
     private javax.swing.JMenuItem itemAbrir;
     private javax.swing.JMenuItem itemCerrar;
-    private javax.swing.JMenuItem itemCerrarOriginal;
+    private javax.swing.JMenuItem itemCerrarVentanas;
     private javax.swing.JMenuItem itemHelpAbrir;
     private javax.swing.JMenuItem itemHelpDescription;
     private javax.swing.JMenuItem itemHelpGuardar;
